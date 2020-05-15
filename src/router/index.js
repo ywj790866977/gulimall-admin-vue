@@ -68,6 +68,7 @@ router.beforeEach((to, from, next) => {
       params: http.adornParams()
     }).then(({data}) => {
       if (data && data.code === 0) {
+        console.log(data.menuList)
         fnAddDynamicMenuRoutes(data.menuList)
         router.options.isAddDynamicMenuRoutes = true
         sessionStorage.setItem('menuList', JSON.stringify(data.menuList || '[]'))
@@ -126,6 +127,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         }
       }
       // url以http[s]://开头, 通过iframe展示
+      // console.log(menuList[i].url)
       if (isURL(menuList[i].url)) {
         route['path'] = `i-${menuList[i].menuId}`
         route['name'] = `i-${menuList[i].menuId}`
