@@ -23,15 +23,15 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'semi': [0],
     // 'quotes': ['error', 'single'],
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        trailingComma: 'none',
-        bracketSpacing: true,
-        jsxBracketSameLine: true,
-        parser: 'flow',
-      },
+    // 'prettier/prettier': [
+    //   'error',
+    //   {
+    //     singleQuote: true,
+    //     trailingComma: 'none',
+    //     bracketSpacing: true,
+    //     jsxBracketSameLine: true,
+    //     parser: 'flow',
+    //   },
     ]
   }
 }
