@@ -26,6 +26,18 @@
         </span>
       </span>
     </el-tree>
+
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+      <el-form :model="category">
+        <el-form-item label="分类名称">
+          <el-input v-model="category.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCategory">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -33,6 +45,8 @@
 export default {
   data() {
     return {
+      category: { name: "", parentCid: 0, catLevel: 0, showStatus: 1, sort: 0 },
+      dialogVisible: false,
       expandedKeys: [],
       list: [],
       defaultProps: {
@@ -55,6 +69,26 @@ export default {
     },
     append(data) {
       console.log(data);
+      this.dialogVisible = true;
+      this.category.parentCid = data.catId;
+      this.category.catLevel = data.catLevel * 1 + 1;
+    },
+    addCategory() {
+      console.log(this.category);
+
+      this.$http({
+        url: this.$http.adornUrl("/product/category/save"),
+        method: "post",
+        data: this.$http.adornData(this.category, false)
+      }).then(() => {
+        this.dialogVisible = false
+        this.$message({
+          type: "success",
+          message: "添加成功成功!"
+        });
+        this.getMenusByEs7();
+        this.expandedKeys = [this.category.parentCid]; 
+      });
     },
     remove(node, data) {
       let ids = [data.catId];
