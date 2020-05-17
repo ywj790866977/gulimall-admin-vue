@@ -29,7 +29,11 @@
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
       <el-table-column prop="brandId" header-align="center" align="center" label="品牌id"></el-table-column>
       <el-table-column prop="name" header-align="center" align="center" label="品牌名"></el-table-column>
-      <el-table-column prop="logo" header-align="center" align="center" label="品牌logo地址"></el-table-column>
+      <el-table-column prop="logo" header-align="center" align="center" label="品牌logo地址">
+        <template slot-scope="scope">
+          <el-image lazy style="width: 100%; height: 100px" :src="scope.row.logo" :fit="fit"></el-image>
+        </template>
+      </el-table-column>
       <el-table-column prop="descript" header-align="center" align="center" label="介绍"></el-table-column>
       <el-table-column prop="showStatus" header-align="center" align="center" label="显示状态">
         <template slot-scope="scope">
@@ -71,6 +75,7 @@ import AddOrUpdate from "./brand-add-or-update";
 export default {
   data() {
     return {
+      fit: "contain",
       dataForm: {
         key: ""
       },
@@ -99,11 +104,18 @@ export default {
           { brandId, showStatus: showStatus ? 1 : 0 },
           false
         )
-      }).then(() => {
-        this.$message({
-          type: "success",
-          message: "修改状态成功"
-        });
+      }).then(({ data }) => {
+        if (data && data.code === 0) {
+          this.$message({
+            type: "success",
+            message: "修改状态成功"
+          });
+        } else {
+          this.$message.error({
+            type: "error",
+            message: data.msg
+          });
+        }
       });
     },
     // 获取数据列表
