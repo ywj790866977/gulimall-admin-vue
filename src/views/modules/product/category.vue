@@ -60,7 +60,7 @@ export default {
       pCid: [],
       updateNodes: [],
       maxLevel: 0,
-      isDraggable: true,
+      isDraggable: false,
       dialogType: 1, //1 添加 ,2 修改
       category: {
         name: "",
@@ -85,6 +85,13 @@ export default {
   methods: {
     batchDelete() {
       let checkedList = this.$refs.menuTree.getCheckedNodes();
+      if (checkedList.length <= 0) {
+        this.$message({
+          type: "error",
+          message: "批量删除数据为空"
+        });
+        return;
+      }
       let ids = checkedList.map(item => item.catId);
       // console.log(ids);
       this.$confirm(`是否删除当前[${ids}]菜单?`, "提示", {
@@ -93,11 +100,11 @@ export default {
         type: "warning"
       })
         .then(() => {
-          // this.$http({
-          //   url: this.$http.adornUrl("/product/category/delete"),
-          //   method: "post",
-          //   data: this.$http.adornData(ids, false)
-          // }).then(({ data }) => {
+          this.$http({
+            url: this.$http.adornUrl("/product/category/delete"),
+            method: "post",
+            data: this.$http.adornData(ids, false)
+          }).then(({ data }) => {
             this.$message({
               type: "success",
               message: "菜单批量删除成功!"
@@ -105,8 +112,8 @@ export default {
             //重新获取列表
             this.getMenusByEs7();
             //设置暂开节点
-            // this.expandedKeys = [node.parent.data.catId];
-          // });
+            this.expandedKeys = [node.parent.data.catId];
+          });
         })
         .catch(() => {
           this.$message({
