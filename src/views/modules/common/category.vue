@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-tree :data="list" :props="defaultProps" node-key="catId" ref="menuTree"></el-tree>
+    <el-tree
+      :data="list"
+      :props="defaultProps"
+      node-key="catId"
+      ref="menuTree"
+      @node-click="nodeClick"
+    ></el-tree>
   </div>
 </template>
 
@@ -20,6 +26,9 @@ export default {
     this.getMenus();
   },
   methods: {
+    nodeClick(data, node, component) {
+      this.$emit("tree-node-click", data, node, component);
+    },
     async getMenus() {
       const res = await this.$http({
         url: this.$http.adornUrl("/product/category/list"),
