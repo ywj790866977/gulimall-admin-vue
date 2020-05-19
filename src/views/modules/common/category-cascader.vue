@@ -44,7 +44,7 @@ export default {
         children: "children"
       },
       categorys: [],
-      paths: this.catelogPath
+      paths: this.catelogPath 
     };
   },
   watch:{
@@ -61,7 +61,7 @@ export default {
   methods: {
     getCategorys() {
       this.$http({
-        url: this.$http.adornUrl("/product/category/list"),
+        url: this.$http.adornUrl("/product/category/list/tree"),
         method: "get"
       }).then(({ data }) => {
         this.categorys = data.data;

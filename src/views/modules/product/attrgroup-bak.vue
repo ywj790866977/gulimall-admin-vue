@@ -1,10 +1,10 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="6">
-      <category @tree-node-click="treenodeclick"></category>
-    </el-col>
-    <el-col :span="18">
-      <div class="mod-config">
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <category @tree-node-click="treenodeclick"></category>
+      </el-col>
+      <el-col :span="18">
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
           <el-form-item>
             <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
@@ -69,29 +69,17 @@
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
 
-        <!-- 修改关联关系 -->
-        <relation-update v-if="relationVisible" ref="relationUpdate" @refreshData="getDataList"></relation-update>
-      </div>
-    </el-col>
-  </el-row>
+      </el-col>
+    </el-row>
+  </div>
+  <!-- <div>1111</div> -->
 </template>
 
 <script>
-/**
- * 父子组件传递数据
- * 1)、子组件给父组件传递数据，事件机制；
- *    子组件给父组件发送一个事件，携带上数据。
- * // this.$emit("事件名",携带的数据...)
- */
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
-import Category from "../common/category";
 import AddOrUpdate from "./attrgroup-add-or-update";
-import RelationUpdate from "./attr-group-relation";
+import Category from "../common/category";
 export default {
-  //import引入的组件需要注入到对象中才能使用
-  components: { Category, AddOrUpdate, RelationUpdate },
-  props: {},
+  components: { Category ,AddOrUpdate},
   data() {
     return {
       catId: 0,
@@ -112,21 +100,15 @@ export default {
     this.getDataList();
   },
   methods: {
-    //处理分组与属性的关联
-    relationHandle(groupId) {
-      this.relationVisible = true;
-      this.$nextTick(() => {
-        this.$refs.relationUpdate.init(groupId);
-      });
-    },
     //感知树节点被点击
     treenodeclick(data, node, component) {
-      if (node.level == 3) {
+      // console.log(node)
+      if (node.childNodes ==null || node.childNodes == 0) {
         this.catId = data.catId;
         this.getDataList(); //重新查询
       }
     },
-    getAllDataList(){
+    getAllDataList() {
       this.catId = 0;
       this.getDataList();
     },
@@ -170,6 +152,7 @@ export default {
     // 新增 / 修改
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true;
+      // 组件渲染完成调用
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id);
       });
@@ -213,5 +196,6 @@ export default {
   }
 };
 </script>
-<style scoped>
+
+<style>
 </style>
