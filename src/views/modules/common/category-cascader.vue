@@ -44,7 +44,7 @@ export default {
         children: "children"
       },
       categorys: [],
-      paths: this.catelogPath 
+      paths: this.catelogPath
     };
   },
   watch:{
